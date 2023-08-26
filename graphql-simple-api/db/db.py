@@ -1,4 +1,4 @@
-from sqlmodel import Session, create_engine, SQLModel
+from sqlmodel import Session, col, create_engine, SQLModel, select, or_
 
 from .models import *
 
@@ -23,11 +23,47 @@ def create_heros():
 
         session.commit()
 
-    # session = Session(engine)
-    # session.add(hero_1)
-    # session.add(hero_2)
-    # session.add(hero_3)
 
-    # session.commit()
+def select_heros():
+    with Session(engine) as session:
+        heros = session.exec(
+            select(Hero)
+            .where(col(Hero.age) >= 35)
+            .limit(1)
+            # .where(Hero.secret_name == "Dive Wilson")
+        ).all()
+        print(heros)
 
-    # session.close()
+
+def update_heros():
+    with Session(engine) as session:
+        statement = select(Hero).where(Hero.name == "Spider-Boy")
+        results = session.exec(statement)
+        hero = results.one()
+        print("Hero:", hero)
+
+        hero.age = 17
+        session.add(hero)
+        session.commit()
+        session.refresh(hero)
+        print("Updated hero:", hero)
+
+
+def delete_heros():
+    with Session(engine) as session:
+        statement = select(Hero).where(Hero.name == "Spider-Boy")
+        results = session.exec(statement)
+        hero = results.one()
+        print("Hero:", hero)
+
+        session.delete(hero)
+        session.commit()
+
+        print("Deleted hero:", hero)
+
+        statement = select(Hero).where(Hero.name == "Spider-Boy")
+        results = session.exec(statement)
+        hero = results.first()
+
+        if hero is None:
+            print("There's no hero named Spider-Boy")

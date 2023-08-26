@@ -2,7 +2,7 @@ import strawberry
 from fastapi import FastAPI
 from strawberry.asgi import GraphQL
 
-from db.db import create_heros, initialize_db
+from db.db import create_heros, delete_heros, initialize_db, select_heros, update_heros
 
 
 @strawberry.type
@@ -38,3 +38,21 @@ app.add_route("/graphql", graphql_app)
 def heros():
     create_heros()
     return "sample data created"
+
+
+@app.get("/select_heros")
+def select_heros():
+    select_heros()
+    return ""
+
+
+@app.get("/update_heros")
+def update():
+    update_heros()
+    return ""
+
+
+@app.get("/delete_heros")
+def delete():
+    delete_heros()
+    return ""
