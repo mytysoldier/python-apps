@@ -2,6 +2,8 @@ import strawberry
 from fastapi import FastAPI
 from strawberry.asgi import GraphQL
 
+from db.db import create_heros, initialize_db
+
 
 @strawberry.type
 class User:
@@ -21,6 +23,8 @@ class Query:
         )
 
 
+initialize_db()
+
 schema = strawberry.Schema(query=Query)
 
 graphql_app = GraphQL(schema)
@@ -30,6 +34,7 @@ app = FastAPI()
 app.add_route("/graphql", graphql_app)
 
 
-# @app.get("/")
-# def ping():
-#     return {"ping": "pong"}
+@app.get("/heros")
+def heros():
+    create_heros()
+    return "sample data created"
