@@ -12,6 +12,8 @@ from db.db import (
     update_heros,
 )
 
+from schema.schema import schema
+
 
 @strawberry.type
 class Hero:
@@ -22,27 +24,9 @@ class Hero:
     team_id: int
 
 
-@strawberry.type
-class User:
-    id: int
-    name: str
-    address: str
-    phone_number: str
-    sex: str
-
-
-@strawberry.type
-class Query:
-    @strawberry.field
-    def user(self) -> User:
-        return User(
-            id=1, name="name", address="address", phone_number="phone_number", sex="sex"
-        )
-
-
 initialize_db()
 
-schema = strawberry.Schema(query=Query)
+# schema = strawberry.Schema(query=Query)
 
 graphql_app = GraphQL(schema)
 
