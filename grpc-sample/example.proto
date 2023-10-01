@@ -10,4 +10,7 @@ message Response {
 
 service ExampleService {
     rpc SayHello (Request) returns (Response);
+    rpc SayHelloClientStream (stream Request) returns (Response);
+    rpc SayHelloServerStream (Request) returns (stream Response);
+    rpc SayHelloByDicStream (stream Request) returns (stream Response);
 }
